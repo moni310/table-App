@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Task Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            border: none;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+    <script>
+        function TaskTable() {
+            const [data, setData] = React.useState([
+                { task: "Onboarding Call", values: ["", ""] },
+                { task: "Google Search Console Access", values: ["", ""] },
+                { task: "Google Analytics Access", values: ["", ""] },
+                { task: "Website Access", values: ["", ""] },
+                { task: "Technical Audit", values: ["", ""] },
+                { task: "Anchor Text and Semantic Analysis", values: ["", ""] },
+                { task: "Competitor Analysis", values: ["", ""] },
+                { task: "Anchor Text / URL Mapping", values: ["", ""] },
+                { task: "Google Data Studio Report + Local Reporting Suite", values: ["", ""] },
+               
+            ]);
+
+            const updateValue = (taskIndex, monthIndex, value) => {
+                const updatedData = data.map((task, i) => {
+                    if (i === taskIndex) {
+                        const updatedValues = task.values.map((val, j) =>
+                            j === monthIndex ? value : val
+                        );
+                        return { ...task, values: updatedValues };
+                    }
+                    return task;
+                });
+                setData(updatedData);
+            };
+
+            return (
+                React.createElement('table', null,
+                    React.createElement('thead', null,
+                        React.createElement('tr', null,
+                            React.createElement('th', null, 'Tasks'),
+                            React.createElement('th', null, 'Month 1'),
+                            React.createElement('th', null, 'Month 2')
+                        )
+                    ),
+                    React.createElement('tbody', null,
+                        data.map((task, taskIndex) => (
+                            React.createElement('tr', { key: task.task },
+                                React.createElement('td', null, task.task),
+                                task.values.map((value, monthIndex) => (
+                                    React.createElement('td', { key: monthIndex },
+                                        React.createElement('input', {
+                                            type: "text",
+                                            value: value,
+                                            onChange: (e) => updateValue(taskIndex, monthIndex, e.target.value)
+                                        })
+                                    )
+                                ))
+                            )
+                        ))
+                    )
+                )
+            );
+        }
+
+        ReactDOM.render(
+            React.createElement(TaskTable),
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>
